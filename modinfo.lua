@@ -2,7 +2,7 @@
 name = "Golden Spear, Reborn!"
 description = "A golden spear with more durability and damage (configurable). Original mod developed by \"_Q_\"."
 author = "PunchablePlushie"
-version = "1.3.0"
+version = "1.3.1"
 forumthread = ""
 server_filter_tags = {"golden spear, golden, spear, weapon, gold, crafting, PunchablePlushie"}
 
