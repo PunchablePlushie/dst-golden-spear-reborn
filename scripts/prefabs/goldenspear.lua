@@ -42,12 +42,10 @@ local function fn()
         return inst
     end
 
-    inst.entity:SetPristine()
-
     inst:AddComponent("weapon")
     inst.components.weapon:SetDamage(TUNING.GOLDENSPEAR_DAMAGE)
 
-    if TUNING.GOLDENSPEAR_USES ~= nil then
+    if TUNING.GOLDENSPEAR_USES > 0 then  -- If configured to be Unbreakable
         inst:AddComponent("finiteuses")
         inst.components.finiteuses:SetMaxUses(TUNING.GOLDENSPEAR_USES)
         inst.components.finiteuses:SetUses(TUNING.GOLDENSPEAR_USES)
