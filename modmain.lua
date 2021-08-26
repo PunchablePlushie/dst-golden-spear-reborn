@@ -24,7 +24,6 @@ end
 
 PrefabFiles = {
 	"goldenspear",
-	-- "gold_spear_projectile",
 }
 
 
@@ -54,69 +53,7 @@ CHARACTER.WARLY.DESCRIBE.GOLDENSPEAR = "For gourmet kebab-ing."
 CHARACTER.WURT.DESCRIBE.GOLDENSPEAR = "Maybe this can help with those tentacles."
 CHARACTER.WALTER.DESCRIBE.GOLDENSPEAR = "But I was taught that gold is not suitable for something like this."
 
--- Throwable Spears Compatibility
---[[
-KnownModIndex = GLOBAL.KnownModIndex
-local throwable_spears = "workshop-2408298309"
-
-if KnownModIndex:IsModEnabled(throwable_spears) then
-	local SMALL_MISS_CHANCE = GetModConfigData("SMALL_MISS_CHANCE", throwable_spears)
-	local SMALL_USES = GetModConfigData("SMALL_USES", throwable_spears)
-	local LARGE_USES = GetModConfigData("LARGE_USES", throwable_spears)
-	local RANGE_CHECK = GetModConfigData("RANGE_CHECK", throwable_spears)
-
-	local smallhits =
-	{
-		frog = true,
-		penguin = true,
-		eyeplant = true,
-	}
-
-	local function spearthrow_onattack(inst, attacker, target, skipsanity)
-		local smalltarget = target:HasTag("smallcreature")
-								and not target:HasTag("spider")
-								and not smallhits[target.prefab]
-		local missed = false
-		local spear = GLOBAL.SpawnSaveRecord(inst._spear)
-		local instPos = inst:GetPosition()
-		if instPos ~= nil then
-			spear.Transform:SetPosition(instPos:Get())
-			if math.random() < SMALL_MISS_CHANCE and smalltarget then
-				missed = true
-				if attacker.components and attacker.components.talker then
-					local miss_message = "Ugh, I don't think I can hit something that small!"
-					if attacker.prefab == 'wx78' then miss_message = "INSUFFICIENT ACCURACY" end
-					attacker.components.talker:Say(miss_message)
-					target:PushEvent("attacked", {attacker = attacker, damage = 0, weapon = spear})
-				end
-			else
-				if target.components.combat then
-					spear.projectile = true
-					target.components.combat:GetAttacked(attacker, attacker.components.combat:CalcDamage(target, spear), spear)
-				end			
-			end
-			if spear.components.finiteuses then
-				spear.components.finiteuses:Use((smalltarget and not missed)
-					and GLOBAL.TUNING.SPEAR_USES/SMALL_USES
-					or GLOBAL.TUNING.SPEAR_USES/LARGE_USES)
-			end
-			spear:AddTag("scarytoprey")
-			spear:DoTaskInTime(1, function(inst) inst:RemoveTag("scarytoprey") end)
-			inst:Remove()
-
-			attacker.SoundEmitter:PlaySound("dontstarve/wilson/attack_weapon", nil, nil, true)
-		end
-	end
-
-	function GoldenSpearPostInit(inst)
-		if not GLOBAL.TheWorld.ismastersim then return end
-
-		inst:AddComponent('spearthrowable')
-		inst.components.spearthrowable:SetRange(8, 10)
-		inst.components.spearthrowable:SetOnAttack(spearthrow_onattack)
-		inst.components.spearthrowable:SetProjectile("gold_spear_projectile")
-	end
-
-	AddPrefabPostInit("goldenspear", GoldenSpearPostInit)
-end
---]]
+-- Tools Are Fuel mod support
+local ModIndex = GLOBAL.KnownModIndex
+local tools_are_fuel = "workshop-599498678"
+TUNING.GOLDENSPEAR_ISFUEL = ModIndex:IsModEnabled(tools_are_fuel)

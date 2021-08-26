@@ -60,7 +60,14 @@ local function fn()
     inst:AddComponent("equippable")
     inst.components.equippable:SetOnEquip( onequip )
     inst.components.equippable:SetOnUnequip( onunequip )
-	
+
+    -- Tools are Fuel mod support
+    if TUNING.GOLDENSPEAR_ISFUEL then
+        inst:AddComponent("fuel")
+        inst.components.fuel.fuelvalue = TUNING.MED_FUEL
+    end
+    --///--
+        
 	MakeHauntableLaunch(inst)
     
     return inst
